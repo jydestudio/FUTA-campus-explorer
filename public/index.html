@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FUTA Campus Explorer</title>
+  <title>Fatoki Lawrence</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="style.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -385,39 +385,9 @@
         fetch('assets/shapefiles/cleaned_data.geojson')
             .then(response => response.json())
             .then(data => {
-                
-                const searchStrings = ["(119)     New Senate Building", "(19)      Prof. Albert Ilemobade Library", "T.I. Francis"]; // Example array
-
-                searchStrings.forEach(searchString => {
-                    let filteredData = data.features.find(feature => 
-                        feature.properties["uniform name"] &&
-                        feature.properties["uniform name"].toLowerCase().includes(searchString.toLowerCase())
-                    );
-
-                    if (filteredData) { // Ensure filteredData is found
-                        let coord1 = filteredData.geometry.coordinates;
-                        
-                        if (coord1.length < 2) {
-                            coord1 = coord1[0][0];
-                        }
-
-                        console.log(coord1);
-                        let popup1 = new maplibregl.Popup({ closeOnClick: true, closeButton: true })
-                            .setLngLat(coord1)  // Set the position based on coordinates
-                            .setHTML(`
-                                <div class="popup" style="font-size: 12px;">
-                                    ${filteredData.properties["uniform name"].slice(0, 50)}...
-                                </div>
-                            `); // Tooltip content
-                        popup1.addTo(map);
-                    } else {
-                        console.log(`No feature found for: ${searchString}`);
-                    }
-});
-                
                 let firstItem = data.features[1];
-                
-                searchBox.placeholder = firstItem.properties["uniform name"].replace(/\s+/g, ' ').trim();
+
+                searchBox.placeholder = firstItem.properties["uniform name"].replace(/\s+/g, ' ').trim();;
                 let coord = firstItem.geometry.coordinates;
                 let latitude = coord[1];
                 let longitude = coord[0];
@@ -837,7 +807,7 @@ async function sendMessage() {
         const data = await response.json();
         console.log(data.reply);
 
-        
+        try {document.querySelector('.ai-msg').remove();} catch (error) {console.log(error)}
         const aiMsg = document.createElement("div");
         aiMsg.classList.add("messages", "ai-msg");
         aiMsg.innerHTML = `${data.friendlyIntro} <br>${data.reply}`;
@@ -845,6 +815,7 @@ async function sendMessage() {
 
         const scrollableDiv = document.querySelector(".chat-container");
         scrollableDiv.scrollTop = scrollableDiv.scrollHeight;
+        
         
         fetch('assets/shapefiles/cleaned_data.geojson')
             .then(response => response.json())
