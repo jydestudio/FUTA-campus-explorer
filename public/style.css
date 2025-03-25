@@ -309,7 +309,7 @@ input:focus {
 
     section#main {
         flex-direction: column;
-        height: 97vh;
+        height: 93vh;
     }
 
     #map, .left-pane {
