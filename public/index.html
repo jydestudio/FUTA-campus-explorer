@@ -385,6 +385,47 @@
         fetch('assets/shapefiles/cleaned_data.geojson')
             .then(response => response.json())
             .then(data => {
+                searchTerms = ["(119)     New Senate Building", "(19)      Prof. Albert Ilemobade Library", "Student Affairs"];
+                searchTerms.forEach((searchTerm)=>{
+                    searchTerm = searchTerm.toLowerCase().trim();
+                    const filteredData = data.features.find(feature => 
+                        feature.properties["uniform name"] &&
+                        feature.properties["uniform name"].toLowerCase().includes(searchTerm)
+                    );
+                    let filteredDataCoord = filteredData.geometry.coordinates;
+                    console.log(filteredDataCoord);
+                    if (filteredDataCoord.length === 1){
+                        filteredDataCoord = filteredDataCoord[0][0];
+                    }
+
+                    let lat = filteredDataCoord[1];
+                    let lon = filteredDataCoord[0];
+
+                    const pop = new maplibregl.Popup({ closeOnClick: true, closeButton: true })
+                        .setLngLat(filteredDataCoord)
+                        .setHTML(`<div class="popup" style="font-size: 12px;">${filteredData.properties["uniform name"].slice(0,50)}...</div>`) // Tooltip content
+                    
+                        marker = new maplibregl.Marker({
+                            element: createCustomMarker()
+                        })
+                        .setLngLat([lon, lat])
+                        .setPopup(pop)
+                        .addTo(map);
+
+                        function createCustomMarker() {
+                            const img = document.createElement('img');
+                            img.src = 'assets/images/mansion.png';  // Replace with your image URL
+                            img.style.width = '40px';  // Adjust size as needed
+                            img.style.height = '40px';
+                            return img;
+                        }
+
+
+                    // pop.addTo(map);
+                })
+                
+
+
                 let firstItem = data.features[1];
 
                 searchBox.placeholder = firstItem.properties["uniform name"].replace(/\s+/g, ' ').trim();;
@@ -835,13 +876,6 @@ async function sendMessage() {
         // message_container.innerHTML += `<div id="ai-response">Radius too large to process</div>`;
     }
 }
-
-
-
-
-
-    
-
 
 </script>
 </body>
