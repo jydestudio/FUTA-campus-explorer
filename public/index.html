@@ -404,23 +404,7 @@
                     const pop = new maplibregl.Popup({ closeOnClick: true, closeButton: true })
                         .setLngLat(filteredDataCoord)
                         .setHTML(`<div class="popup" style="font-size: 12px;">${filteredData.properties["uniform name"].slice(0,50)}...</div>`) // Tooltip content
-                    
-                        marker = new maplibregl.Marker({
-                            element: createCustomMarker()
-                        })
-                        .setLngLat([lon, lat])
-                        .setPopup(pop)
-                        .addTo(map);
-
-                        function createCustomMarker() {
-                            const img = document.createElement('img');
-                            img.src = 'assets/images/mansion.png';  // Replace with your image URL
-                            img.style.width = '40px';  // Adjust size as needed
-                            img.style.height = '40px';
-                            return img;
-                        }
-
-
+      
                     pop.addTo(map);
                 })
                 
